@@ -2,9 +2,10 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Class that measures the distance between two objects and prints them to a TextMeshPro object
-/// </summary>
+// ===============================
+// AUTHOR: Thomas Rood
+// PURPOSE: Class that measures the distance between two objects and prints them to a TextMeshPro object.
+// ===============================
 public class DistancePrint : MonoBehaviour
 {
 
