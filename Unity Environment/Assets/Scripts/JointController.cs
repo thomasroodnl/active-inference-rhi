@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Class encapsulating a joint and controlling its position and movement
-/// </summary>
+// ===============================
+// AUTHOR: Thomas Rood
+// PURPOSE: Class encapsulating a body joint allowing for easy manipulation of the joint.
+// ===============================
 public class JointController
 {
     private readonly string name;
@@ -14,6 +15,13 @@ public class JointController
     private Vector3 minAngles;
     private Vector3 maxAngles;
 
+    /// <summary>
+    /// Initialize the JointController.
+    /// </summary>
+    /// <param name="name">Joint name for debugging</param>
+    /// <param name="joint">The GameObject representing the joint</param>
+    /// <param name="minAngles">Minimum value of the joint angles allowed</param>
+    /// <param name="maxAngles">Maximum value of the joint angles allowed</param>
     public JointController(string name, GameObject joint, Vector3 minAngles, Vector3 maxAngles)
     {
         this.name = name;
@@ -25,7 +33,7 @@ public class JointController
     }
 
     /// <summary>
-    /// Move joint by a certain distance
+    /// Move joint by a certain distance.
     /// </summary>
     /// <param name="deltaX">X distance</param>
     /// <param name="deltaY">Y distance</param>
@@ -35,13 +43,8 @@ public class JointController
         SetRelativeJointAngles(relativeJointAngles + new Vector3(deltaX, deltaY, deltaZ));
     }
 
-    public void ApplyTorque(float torqueX, float torqueY, float torqueZ)
-    {
-
-    }
-
     /// <summary>
-    /// Set joint angles to a certain value
+    /// Set joint angles to a certain rotation value.
     /// </summary>
     /// <param name="jointAngles">angles to set</param>
     public void SetRelativeJointAngles(Vector3 jointAngles)
@@ -54,10 +57,10 @@ public class JointController
     }
 
     /// <summary>
-    /// Check whether a set of angles does not exceed the max angle parameter
+    /// Check whether a set of joint angles does not exceed the min and max angle parameters
     /// </summary>
-    /// <param name="angles">set of angles to test</param>
-    /// <returns>True if angles is within MaxAngles, false otherwise</returns>
+    /// <param name="angles">Set of joint angles to test</param>
+    /// <returns>True if angles is within [minAngles, MaxAngles], false otherwise</returns>
     public bool WithinMinMaxAngles(Vector3 angles)
     {
         return minAngles.x <= angles.x && angles.x <= maxAngles.x &&
@@ -73,37 +76,37 @@ public class JointController
         SetRelativeJointAngles(new Vector3(0f, 0f, 0f));
     }
 
+    /// <summary>
+    /// Get the joint's x rotation relative to the initial position.
+    /// </summary>
+    /// <returns>float: The relative x rotation</returns>
     public float GetRelativeX()
     {
         return GetRelativeJointAngles().x;
     }
 
+    /// <summary>
+    /// Get the joint's y rotation relative to the initial position.
+    /// </summary>
+    /// <returns>float: The relative y rotation</returns>
     public float GetRelativeY()
     {
         return GetRelativeJointAngles().y;
     }
 
+    /// <summary>
+    /// Get the joint's z rotation relative to the initial position.
+    /// </summary>
+    /// <returns>float: The relative z rotation</returns>
     public float GetRelativeZ()
     {
         return GetRelativeJointAngles().z;
     }
 
-    public float GetNormalizedX()
-    {
-        return ((GetRelativeX() - minAngles.x) / (maxAngles.x - minAngles.x))* 2 - 1;
-    }
-
-    public float GetNormalizedY()
-    {
-        return ((GetRelativeY() - minAngles.y) / (maxAngles.y - minAngles.y)) * 2 - 1;
-    }
-
-    public float GetNormalizedZ()
-    {
-        return ((GetRelativeZ() - minAngles.z) / (maxAngles.z - minAngles.z)) * 2 - 1;
-    }
-
-
+    /// <summary>
+    /// Get the joint's rotation relative to the initial position.
+    /// </summary>
+    /// <returns>float: The relative rotation</returns>
     public Vector3 GetRelativeJointAngles()
     {
         return this.relativeJointAngles;
