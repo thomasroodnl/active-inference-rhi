@@ -2,15 +2,15 @@
 using MLAgents;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Class representing the agent or 'real' body
-/// </summary>
+// ===============================
+// AUTHOR: Thomas Rood
+// PURPOSE: Class representing the Agent.
+// ===============================
 public class LeftArmAgent : Agent
 {
     /// <summary>
-    /// Parameters allowing the joints to be added from the environment.
+    /// Parameters that allow the specification of the joint angles
     /// </summary>
-
     [Tooltip("Left shoulder joint")]
     public GameObject leftShoulderJoint;
 
@@ -23,12 +23,18 @@ public class LeftArmAgent : Agent
     [Tooltip("Head joint")]
     public GameObject headJoint;
 
+    /// <summary>
+    /// Parameters that allow for distance measurement
+    /// </summary>
     [Tooltip("Middle hand")]
     public GameObject middleHand;
 
     [Tooltip("Rubber Arm")]
     public GameObject rubberArm;
 
+    /// <summary>
+    /// Parameters that allow for the perception of visuo-tactile stimulation event times
+    /// </summary>
     [Tooltip("Ball")]
     public GameObject ballHandler;
 
@@ -49,12 +55,13 @@ public class LeftArmAgent : Agent
     private VibHandler vibScript;
 
     /// <summary>
-    /// Turn speed in degrees/second.
+    /// Angular velocity multiplier
+    /// Velocity in degrees/second of the joint angles when input action == 1.
     /// </summary>
     private float turnSpeed = 1f;
 
     /// <summary>
-    /// Initial setup, called when the agent is enabled
+    /// Initial setup, called at startup.
     /// </summary>
     /// <remarks>
     /// In future versions of ML-agents (> 0.14), InitializeAgent should be replaced by Initialize.
@@ -69,26 +76,13 @@ public class LeftArmAgent : Agent
         leftElbow    = new JointController("Left elbow", leftElbowJoint, new Vector3(-999, -999, -999), new Vector3(999, 999, 999)); //new Vector3(-25, -999, -999), new Vector3(25, 999, 999));
         head = new JointController("Head", headJoint, new Vector3(-999, -999, -999), new Vector3(999, 999, 999));
 
+        // Retrieve the rubberArm and visuo-tactile stimulation objects from the environment
         rubberArmController = rubberArm.GetComponent<RubberArmController>();
         ballScript = ballHandler.GetComponent<BallHandler>();
         vibScript = vibHandler.GetComponent<VibHandler>();
 
-        //HeadJoint.transform.localPosition = new Vector3(-0.0273f, 0.013f, 0.0357f); // (dataset and network ne1)
-        //head.SetRelativeJointAngles(new Vector3(60f, -0f)); // (dataset and network ne1)
-
-        head.SetRelativeJointAngles(new Vector3(15f, -20f)); // (dataset and network 6 and s1, s2)
-        //leftShoulder.SetRelativeJointAngles(new Vector3(0, 0, 31.218f));
-        //head.SetRelativeJointAngles(new Vector3(12f, -25f)); // (dataset and network 7)
-        //head.SetRelativeJointAngles(new Vector3(15f, -22f)); // (dataset and network s3 and s4)
-        //head.SetRelativeJointAngles(new Vector3(23f, -17.7f)); // 
-
-        //HeadJoint.transform.localPosition = new Vector3(0f, 0.00654f, 0.0103f); // (dataset and network ne1)
-        //head.SetRelativeJointAngles(new Vector3(30.854f, -21.931f)); // 
-
-
-        //HeadJoint.transform.localPosition = new Vector3(0f, 0.00693f, 0.01187f);
-        //head.SetRelativeJointAngles(new Vector3(24f, -28f));
-
+        // Set the head rotation (and subsequently the camera perspective)
+        head.SetRelativeJointAngles(new Vector3(15f, -20f)); 
     }
 
     /// <summary>
@@ -100,64 +94,70 @@ public class LeftArmAgent : Agent
     /// <param name="vectorAction">The list of actions to take</param>
     public override void AgentAction(float[] vectorAction)
     {
-        if(vectorAction[0] == 0f) 
+        // The first action vector value specifies the type of control from the Python environment
+        switch (vectorAction[0])
         {
-            leftShoulder.MoveJoint(0f, 0f, vectorAction[1] * turnSpeed * Time.fixedDeltaTime);
-            leftElbow.MoveJoint(vectorAction[2] * turnSpeed * Time.fixedDeltaTime, 0f, 0f);
-        } else
-        {
-            if(vectorAction[0] == 1f)
-            {
+            // Normal action (joint velocity control)
+            default:
+                leftShoulder.MoveJoint(0f, 0f, vectorAction[1] * turnSpeed * Time.fixedDeltaTime);
+                leftElbow.MoveJoint(vectorAction[2] * turnSpeed * Time.fixedDeltaTime, 0f, 0f);
+                break;
+
+            // Joint angle rotation (set joint angle directly)
+            case 1f:
                 leftShoulder.SetRelativeJointAngles(new Vector3(0f, 0f, vectorAction[1]));
                 leftElbow.SetRelativeJointAngles(new Vector3(vectorAction[2], 0f, 0f));
-            }
-            else
-            {
-                rubberArmController.setLeftShoulderZ(vectorAction[1]);
-                rubberArmController.setLeftElbowX(vectorAction[2]);
-            }
+                break;
+                
+            // Rubber arm joint (set rubber arm joint angle)
+            case 2f:
+                rubberArmController.setRelativeLeftShoulderZ(vectorAction[1]);
+                rubberArmController.setRelativeLeftElbowX(vectorAction[2]);
+                break;
         }
     }
 
     /// <summary>
     /// Read inputs from the keyboard and convert them to a list of actions.
-    /// This is called only when the player wants to control the agent and has set
-    /// Behavior Type to "Heuristic Only" in the Behavior Parameters inspector.
+    /// Called when the user wants to control the agent directly by setting
+    /// Behavior Type to "Heuristic Only" in the Behavior Parameters inspector (of the Real body object).
     /// </summary>
-    /// <returns>A vectorAction array of floats that will be passed into <see cref="AgentAction(float[])"/></returns>
+    /// <remarks>
+    /// Control:
+    ///     W -> Extend elbow
+    ///     S -> Flex elbow (bring lower arm to upper arm)
+    ///     A -> Abduct shoulder (move arm away from body)
+    ///     D -> Adduct shoulder (move arm towards body)
+    /// </remarks>
+    /// <returns>A vector of action that will be passed to AgentAction(float[])</returns>
     public override float[] Heuristic()
     {
         float shoulderRotate = 0f;
         if (Input.GetKey(KeyCode.A))
         {
-            // turn left
             shoulderRotate = -0.5f;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            // turn right
             shoulderRotate = 0.5f;
         }
 
         float elbowRotate = 0f;
         if (Input.GetKey(KeyCode.W))
         {
-            // turn left
             elbowRotate = -0.5f;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            // turn right
             elbowRotate = 0.5f;
         }
-
 
         // Put the actions into an array and return
         return new float[] { 0f, shoulderRotate, elbowRotate };
     }
 
     /// <summary>
-    /// Reset the agent and area
+    /// Called upon reset of the environment. Resets the joint positions.
     /// </summary>
     /// <remarks>
     /// In future versions of ML-agents (> 0.14), AgentReset should be replaced by OnEpisodeBegin.
@@ -167,21 +167,17 @@ public class LeftArmAgent : Agent
         leftShoulder.ResetJoint();
         leftUpperArm.ResetJoint();
         leftElbow.ResetJoint();
-        //InitializeAgent();
-        //leftShoulder.SetRelativeJointAngles(new Vector3(0, 0, 31.218f));
     }
 
 
     /// <summary>
-    /// Collect all non-Raycast observations
+    /// Collect observations. Number of calls to AddVectorObs should match with the
+    /// observation vector size set in the Behavior Parameters inspector (of the Real body object).
     /// </summary>
     public override void CollectObservations()
     {
         // Shoulder extension/flexion
         AddVectorObs(leftShoulder.GetRelativeZ());
-
-        // Upper arm twist
-        // AddVectorObs(leftUpperArm.GetRelativeY());
         
         // Elbow extension/flexion
         AddVectorObs(leftElbow.GetRelativeX());
@@ -202,35 +198,10 @@ public class LeftArmAgent : Agent
         AddVectorObs(middleHand.transform.position.z - rubberArmController.getMiddleHand().transform.position.z);
 
         // Shoulder extension/flexion
-        AddVectorObs(rubberArmController.getLeftShoulderZ());
-
-        // Upper arm twist
-        // AddVectorObs(leftUpperArm.GetRelativeY());
+        AddVectorObs(rubberArmController.getRelativeLeftShoulderZ());
 
         // Elbow extension/flexion
-        AddVectorObs(rubberArmController.getLeftElbowX());
-
-        //Debug.Log(Vector3.Distance(middleHand.transform.position, rubberArmController.getMiddleHand().transform.position))
-        // Head horizontal rotation
-        //AddVectorObs(head.GetRelativeY());
-
-        // Head vertical rotaiton
-        //AddVectorObs(head.GetRelativeX());
-
-    }
-
-    /// <summary>
-    /// Build in void that runs every fixed update (by default every 0.02 seconds)
-    /// </summary>
-    private void FixedUpdate()
-    {
-        //Quaternion myRotation = Quaternion.identity;
-        //myRotation.eulerAngles = new Vector3(0, -90, 180);
-        //leftShoulderJoint.transform.rotation = myRotation;
-        //Debug.Log("Shoulder " + leftShoulderJoint.transform.rotation.eulerAngles + "   Elbow " + leftElbowJoint.transform.localEulerAngles);
-        //leftElbow.MoveJoint(1f * turnSpeed * Time.fixedDeltaTime, 0, 0
-        //leftElbow.SetRelativeJointAngles(new Vector3(0, 0, -10));
-        //leftElbow.SetRelativeJointAngles(new Vector3(40, 0, 0));
+        AddVectorObs(rubberArmController.getRelativeLeftElbowX());
     }
 
 }
