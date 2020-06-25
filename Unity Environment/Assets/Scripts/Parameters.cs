@@ -3,8 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
+// ===============================
+// AUTHOR: Thomas Rood
+// PURPOSE: Class functioning as central parameter configuration point.
+// ===============================
 public class Parameters : MonoBehaviour
 {
+    /// <summary>
+    /// The experimental condition to use.
+    /// </summary>
     public enum Condition
     {
         Left,
@@ -16,12 +23,18 @@ public class Parameters : MonoBehaviour
         Python_configured
     }
 
+    /// <summary>
+    /// The type of stimulation applied.
+    /// </summary>
     public enum Stimulation
     {
         synchronous,
         asynchronous
     }
 
+    /// <summary>
+    /// The arm that is visible to the agent's camera.
+    /// </summary>
     public enum VisibleArm
     {
         realArm,
@@ -44,29 +57,40 @@ public class Parameters : MonoBehaviour
 
     private GameObject[] cameraObjects;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// Configures ApplyParameters() to be executed at reset.
+    /// Executes ApplyParameters().
+    /// </summary>
+
     void Start()
     {
         Academy.Instance.OnEnvironmentReset += () =>
         {
-            Reset();
+            ApplyParameters();
         };
 
-        setCondition();
-        setVisibleArm();
+        ApplyParameters();
     }
 
-    void Reset()
+    /// <summary>
+    /// Applies the provided parameters.
+    /// </summary>
+    void ApplyParameters()
     {
         setCondition();
         setVisibleArm();
     }
 
+    /// <summary>
+    /// Applies the condition parameter. 
+    /// If conditionSetMe == Condition.Python-configured, the condition supplied by the Python script is used.
+    /// </summary>
     private void setCondition()
     {
         if (conditionSetMe == Condition.Python_configured)
         {
-            condition = (Condition)(int)Academy.Instance.FloatProperties.GetPropertyWithDefault("condition", 1f);
+            condition = (Condition) (int) Academy.Instance.FloatProperties.GetPropertyWithDefault("condition", 1f);
         }
         else
         {
@@ -74,6 +98,10 @@ public class Parameters : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies the visible arm parameter.
+    /// Updates the camera's culling mask to match the parameter.
+    /// </summary>
     private void setVisibleArm()
     {
         if (visibleArm == VisibleArm.Python_configured)
@@ -103,12 +131,6 @@ public class Parameters : MonoBehaviour
                     break;
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
 }
