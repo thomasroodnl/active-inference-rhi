@@ -24,21 +24,22 @@ public class Parameters : MonoBehaviour
     }
 
     /// <summary>
-    /// The type of stimulation applied.
-    /// </summary>
-    public enum Stimulation
-    {
-        synchronous,
-        asynchronous
-    }
-
-    /// <summary>
     /// The arm that is visible to the agent's camera.
     /// </summary>
     public enum VisibleArm
     {
         realArm,
         rubberArm,
+        Python_configured
+    }
+
+    /// <summary>
+    /// The type of stimulation applied.
+    /// </summary>
+    public enum Stimulation
+    {
+        synchronous,
+        asynchronous,
         Python_configured
     }
 
@@ -49,11 +50,13 @@ public class Parameters : MonoBehaviour
     public VisibleArm visibleArmSetMe;
 
     [Tooltip("Stimulation type")]
-    public Stimulation stimulation;
+    public Stimulation stimulationSetMe;
 
     public Condition condition;
 
     public VisibleArm visibleArm;
+
+    public Stimulation stimulation;
 
     private GameObject[] cameraObjects;
 
@@ -80,6 +83,7 @@ public class Parameters : MonoBehaviour
     {
         setCondition();
         setVisibleArm();
+        setStimulation();
     }
 
     /// <summary>
@@ -90,7 +94,7 @@ public class Parameters : MonoBehaviour
     {
         if (conditionSetMe == Condition.Python_configured)
         {
-            condition = (Condition) (int) Academy.Instance.FloatProperties.GetPropertyWithDefault("condition", 1f);
+            condition = (Condition)(int)Academy.Instance.FloatProperties.GetPropertyWithDefault("condition", 1f);
         }
         else
         {
@@ -104,7 +108,7 @@ public class Parameters : MonoBehaviour
     /// </summary>
     private void setVisibleArm()
     {
-        if (visibleArm == VisibleArm.Python_configured)
+        if (visibleArmSetMe == VisibleArm.Python_configured)
         {
             visibleArm = (VisibleArm)(int)Academy.Instance.FloatProperties.GetPropertyWithDefault("visiblearm", 0f);
         }
@@ -133,5 +137,20 @@ public class Parameters : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies the stimulation parameter.
+    /// If stimulationSetMe == Stimulation.Python-configured, the condition supplied by the Python script is used.
+    /// </summary>
+    private void setStimulation()
+    {
+        if (stimulationSetMe == Stimulation.Python_configured)
+        {
+            stimulation = (Stimulation)(int)Academy.Instance.FloatProperties.GetPropertyWithDefault("stimulation", 0f);
+        }
+        else
+        {
+            stimulation = stimulationSetMe;
+        }
+    }
 }
 
