@@ -1,9 +1,8 @@
 import math
 
+import numpy as np
 import torch
 from torch.autograd.gradcheck import zero_gradients
-
-from unity import *
 
 
 def min_max_norm(data, min, max):
