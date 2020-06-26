@@ -3003,9 +3003,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   conditionSetMe: 6
   visibleArmSetMe: 2
-  stimulation: 0
+  stimulationSetMe: 2
   condition: 1
   visibleArm: 0
+  stimulation: 0
 --- !u!4 &729842297
 Transform:
   m_ObjectHideFlags: 0
