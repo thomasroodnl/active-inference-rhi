@@ -26,9 +26,9 @@ class CSVLogger:
         with open('./operation_logs/' + self.log_id + '.csv', mode='w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow(['sigma_v_mu', 'sigma_v_a', 'sigma_p', 'sigma_mu', 'attractor_active', 'beta',
-                                 'sp_active', 'sp_noise_variance'])
+                                  'sp_noise_variance'])
             filewriter.writerow([fep_agent.sigma_v_mu, fep_agent.sigma_v_a, fep_agent.sigma_p, fep_agent.sigma_mu,
-                                 fep_agent.attractor_active, fep_agent.gamma, fep_agent.sp_active,
+                                 fep_agent.attractor_active, fep_agent.gamma,
                                  fep_agent.sp_noise_variance])
             filewriter.writerow(['Iteration', 'A_Shoulder', 'A_Elbow', 'A_dot_Shoulder', 'A_dot_Elbow', 'mu_Shoulder',
                                  'mu_Elbow', 'sp_Shoulder', 'sp_Elbow', 'Ev attr', 'beta', 'last_vt', 'last_tt',
