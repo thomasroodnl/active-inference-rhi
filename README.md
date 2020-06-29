@@ -10,7 +10,7 @@ git clone https://github.com/thomasroodnl/active-inference-rhi.git
 ```
 ### Installing the necessary packages
 The fastest way to get the Python environment up and running is by creating a new conda environment (for the installation of conda see: [link](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)). The repository contains a file named 'conda-environment.yml', which can be used to automatically create a conda environment containing the right packages. To create an environment from this file:
-1. Open a terminal/Annaconda prompt and navigate to the root of the repository
+1. Open a terminal/Anaconda prompt and navigate to the root of the repository
 2. Execute the following command to download and install the necessary packages in a new environment:
 ```sh
 conda env create -f conda-environment.yml
