@@ -1,6 +1,6 @@
 # Deep active inference model of the rubber-hand illusion
 
-This repository contains the full code used in "A deep active inference model of the rubber-hand illusion". This repository consists of two parts: The environment modelled in Unity and a Python repository containing the agent code. 
+This repository contains the full code used in "A deep active inference model of the rubber-hand illusion". This repository consists of two parts: The environment modelled in Unity and a Python repository containing the agent code. These components interact by means of the [ML-Agents Toolkit for Unity](https://github.com/Unity-Technologies/ml-agents).
 
 
 ## Setup
