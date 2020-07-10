@@ -91,7 +91,7 @@ class FepAgent:
         self.last_tt = -60
         self.new_tv = False
         self.new_tt = False
-        self.decay = 0.999
+        self.r_decay = 1 / 80
         """/Visuo-tactile stimulation parameters"""
 
         """Additional paramters"""
@@ -185,7 +185,7 @@ class FepAgent:
             self.new_tv = False
             self.new_tt = False
         else:
-            new_gamma = (self.gamma * np.exp(-((self.env.get_current_env_time() - self.last_tt) ** 2 / (1 / self.dt)) * (1 / 80)))[0]
+            new_gamma = (self.gamma * np.exp(-((self.env.get_current_env_time() - self.last_tt) ** 2 / (1 / self.dt)) * self.r_decay))[0]
 
         return min(max(self.prior_gamma, new_gamma), 1)
 
