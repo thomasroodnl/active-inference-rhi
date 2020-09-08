@@ -38,4 +38,4 @@ The model_operation folder contains a file `main_inference.py` which can be used
 > Note: the build included is a universal Windows platform build (x86 for backward compatability). For Mac/Linux based systems, it should still be possible to access the environment through the Unity editor. Please contact us if you run into any issues such that we can update the instructions and/or include a build for every platform.  
 
 
-Rood, T., van Gerven, M., Lanillos, P. (2020): A deep active inference model of the rubber-hand illusion. International Workshop on Active Inference, European Conference of Machine Learning (ECML/PKDD). https://arxiv.org/abs/2008.07408
+<sup>1</sup> Rood, T., van Gerven, M., Lanillos, P. (2020): A deep active inference model of the rubber-hand illusion. International Workshop on Active Inference, European Conference of Machine Learning (ECML/PKDD). https://arxiv.org/abs/2008.07408
