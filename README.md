@@ -4,7 +4,7 @@ This repository contains the full code used in "A deep active inference model of
 
 
 ## Setup
-To use the environment and Python code, clone this repository or download its contents directly from the [latest release](#releases). 
+To use the environment and Python code, clone this repository or download its contents directly from the [latest release](https://github.com/thomasroodnl/active-inference-rhi/releases/tag/v1.0). 
 ```sh
 git clone https://github.com/thomasroodnl/active-inference-rhi.git
 ```
