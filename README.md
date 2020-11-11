@@ -34,7 +34,7 @@ The Python project contains three main folders:
 
 The model_operation folder contains a file `main_inference.py` which can be used to run the agent in the environment. There are two ways to run the agent:
 1. Run the Python code with `editor_mode = False`, which will automatically launch a prebuild version of the environment (located at /Unity Environment/build/).
-2. Open the Unity project in the Unity editor, run the Python code with `editor_mode = True` and click the play button in the Unity editor when prompted in the Python console.
+2. Open the Unity project in the Unity editor, run the Python code with `editor_mode = True` and click the play button in the Unity editor when prompted in the Python console. If you are using Unity Hub, you can load the project by clicking the **ADD** button in the 'Projects' overview and selecting the **Unity Environment** folder. *Note: If the environment is empty when opening the project for the first time, navigate to the 'Scenes' folder in the file navigator in the bottom left of the UI. Double-clicking the `DefaultScene.unity` file will open the agent environment.*
 > Note: the build included is a universal Windows platform build (x86 for backward compatability). For Mac/Linux based systems, it should still be possible to access the environment through the Unity editor. Please contact us if you run into any issues such that we can update the instructions and/or include a build for every platform.  
 
 
