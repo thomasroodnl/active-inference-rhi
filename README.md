@@ -19,7 +19,7 @@ After all the packages have been downloaded and installed, the environment can b
 ```sh
 conda activate active-inference-env
 ```
-To easily run and edit the scripts in the Python repository, open the **active-inference-agent** folder as a project in an IDE of choice and make sure to set the project interpreter to the `python.exe` of the **active-inference-env** environment. If you have trouble finding the location of the environment folder containing this file, you can use the following command to show the file system paths for all environments:
+To easily run and edit the scripts in the Python repository, open the **active-inference-agent** folder as a project in an IDE of choice. This is important as the current state of relative imports only functions correctly with respect to the **active-inference-agent** folder as source folder. In addition, make sure to set the project interpreter to the `python.exe` of the **active-inference-env** environment. If you have trouble finding the location of the environment folder containing this file, you can use the following command to show the file system paths for all environments:
 ```sh
 conda info --envs
 ```
@@ -37,5 +37,27 @@ The model_operation folder contains a file `main_inference.py` which can be used
 2. Open the Unity project in the Unity editor, run the Python code with `editor_mode = True` and click the play button in the Unity editor when prompted in the Python console. If you are using Unity Hub, you can load the project by clicking the **ADD** button in the 'Projects' overview and selecting the **Unity Environment** folder. *Note: If the environment is empty when opening the project for the first time, navigate to the 'Scenes' folder in the file navigator in the bottom left of the UI. Double-clicking the `DefaultScene.unity` file will open the agent environment.*
 > Note: the build included is a universal Windows platform build (x86 for backward compatability). For Mac/Linux based systems, it should still be possible to access the environment through the Unity editor. Please contact us if you run into any issues such that we can update the instructions and/or include a build for every platform.  
 
+## Citing
+If you use this software in your research, please cite [our work](https://doi.org/10.1007/978-3-030-64919-7_10) using the following BibTex entry:
+```
+@InProceedings{rood2020deep,
+author="Rood, Thomas
+and van Gerven, Marcel
+and Lanillos, Pablo",
+editor="Verbelen, Tim
+and Lanillos, Pablo
+and Buckley, Christopher L.
+and De Boom, Cedric",
+title="A Deep Active Inference Model of the Rubber-Hand Illusion",
+booktitle="Active Inference",
+year="2020",
+publisher="Springer International Publishing",
+address="Cham",
+pages="84--91",
+abstract="Understanding how perception and action deal with sensorimotor conflicts, such as the rubber-hand illusion (RHI), is essential to understand how the body adapts to uncertain situations. Recent results in humans have shown that the RHI not only produces a change in the perceived arm location, but also causes involuntary forces. Here, we describe a deep active inference agent in a virtual environment, which we subjected to the RHI, that is able to account for these results. We show that our model, which deals with visual high-dimensional inputs, produces similar perceptual and force patterns to those found in humans.",
+isbn="978-3-030-64919-7"
+}
+```
 
-<sup>1</sup> Rood, T., van Gerven, M., Lanillos, P. (2020): A deep active inference model of the rubber-hand illusion. International Workshop on Active Inference, European Conference of Machine Learning (ECML/PKDD). https://arxiv.org/abs/2008.07408
+
+<sup>1</sup> Thomas Rood, Marcel van Gerven, and Pablo Lanillos. [A deep active inference model of the rubber-hand illusion](https://doi.org/10.1007/978-3-030-64919-7_10). In Tim Verbelen, Pablo Lanillos,  Christopher L. Buckley, and Cedric De Boom, editors, *Active Inference*, pages 84–91, Cham, 2020. Springer International Publishing.
